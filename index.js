@@ -1,7 +1,20 @@
 const express = require('express');
 const app = express();
 const Joi = require('@hapi/joi');
+const log = require('./logger');
+const auth = require('./Authenticate')
+const morgan = require('morgan')
 app.use(express.json())
+
+// console.log(app.get('env'))
+
+// console.log(`Node ENV ${process.env.NODE_ENV}`)
+
+// app.use(log)
+
+// app.use(auth)
+
+app.use(morgan('tiny'))
 
 app.listen(3000, () => console.log('The server is running at 3000...'));
 let geners = [
