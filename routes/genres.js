@@ -1,57 +1,57 @@
+const mongoose = require('mongoose');
 const express = require('express');
-
+const Joi = require('@hapi/joi');
 const router = express.Router();
 
-let geners = [
-    {id:'1', name:'Action'},
-    {id:'2', name:'Horror'},
-    {id:'3', name:'Thriller'}
-]
+const Genre = mongoose.model('Genre', new mongoose.Schema({
+    name: {
+    type: String,
+    require: true,
+    minLength:5,
+    maxLength:50
+    }
+}));
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const geners = await Genre.find().sort('name')
     res.send(geners)
 });
 
-router.get('/:id', (req, res) => {
-   
-    let genere = geners.find(gen => gen.id == parseInt(req.params.id))
-    if(!genere) return res.status(400).send('The resouce with the given id was not found')
-    return res.send(genere)
-});
-
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     let {error, value} = Joi.string().min(3).validate(req.body.name)
     if(error) return res.status(404).send(error.details[0].message)
 
-    let genere = {
-        id: geners.length + 1,
-        name:req.body.name
-    }
-
-    geners.push(genere)
-    res.send(genere)
+    let genere = new Genre({ name:req.body.name });
+    genre = await genere.save();
+    res.send(genere);
 })
 
-
-router.put('/:id', (req, res) => {
-    let genere = geners.find(gen => gen.id == parseInt(req.params.id))
-    if(!genere) return res.status(400).send('The resouce with the given id was not found')
-
+router.put('/:id', async (req, res) => {
     let {error, value} = Joi.string().min(3).validate(req.body.name)
     if(error) return res.status(404).send(error.details[0].message)
 
+    let genere = await Genre.findByIdAndUpdate(req.params.id, {name : req.body.name}, {
+        new : true
+    })
+ 
+    if(!genere) return res.status(400).send('The resouce with the given id was not found')
     genere.name = req.body.name;
     res.send(genere)
 
 })
 
-router.delete('/:id', (req, res) => {
-    // code block
-    let genere = geners.find(gen => gen.id == parseInt(req.params.id))
+router.get('/:id', async (req, res) => {
+    let genere =  await Genre.findById(req.params.id);
     if(!genere) return res.status(400).send('The resouce with the given id was not found')
+    return res.send(genere)
+});
 
-    let index = indexOf(genere);
-    geners = geners.splice(index, 1);
+router.delete('/:id', async (req, res) => {
+    // code block
+    let genere =  await Genre.findByIdAndRemove(req.params.id);
+    if(!genere) return res.status(404).send('The resouce with the given id was not found')
+
+    res.send(genere)
 })
 
 module.exports = router;

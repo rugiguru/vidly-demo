@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const express = require('express');
 const app = express();
 const Joi = require('@hapi/joi');
@@ -20,5 +21,9 @@ app.use('/api/geners', genres)
 app.use(morgan('tiny'))
 
 app.listen(3000, () => console.log('The server is running at 3000...'));
+
+mongoose.connect('mongodb://localhost/vidly', { useNewUrlParser: true,useUnifiedTopology: true })
+    .then((res) => console.log('Connected to MongoDB...'))
+    .catch((err) => console.error('Could not connect to MongoDB...', err))
 
 
