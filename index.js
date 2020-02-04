@@ -8,8 +8,10 @@ const morgan = require('morgan')
 app.use(express.json())
 
 const genres = require('./routes/genres');
+const customers = require('./routes/customers')
 
 app.use('/api/geners', genres)
+app.use('/api/customers', customers)
 // console.log(app.get('env'))
 
 // console.log(`Node ENV ${process.env.NODE_ENV}`)
