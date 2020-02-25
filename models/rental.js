@@ -60,7 +60,7 @@ const validateRental = rental =>{
         customerId: Joi.string().required(),
         movieId: Joi.string().required()
     });
-    const { error } = schema.validate(customer);
+    const { error } = schema.validate(rental);
     return error;
 }
 
