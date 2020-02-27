@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Joi = require('@hapi/joi');
 const User = mongoose.model('User', new mongoose.Schema({
     name: {
         type: String,
