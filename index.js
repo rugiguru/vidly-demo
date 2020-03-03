@@ -1,3 +1,4 @@
+const config = require("config")
 const mongoose = require('mongoose')
 const express = require('express');
 const app = express();
@@ -18,8 +19,12 @@ app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users', users);
 app.use('/api/auth', auth)
-
 app.use(morgan('tiny'))
+
+if(!config.get('jwtPrivateKey')){
+console.log("FATAL ERROR: jwtPrivateKey not found");
+process.exit(1);
+}
 
 app.listen(3000, () => console.log('The server is running at 3000...'));
 

@@ -3,6 +3,7 @@ const express = require('express');
 const bycrypt = require("bcrypt");
 const Joi = require("@hapi/joi");
 
+
 const router = express.Router();
 
 router.post('/', async (req, res) => {
@@ -13,10 +14,10 @@ router.post('/', async (req, res) => {
     if(!user) return res.status(400).send('Invalid email or password.');
 
     const validPassword = await bycrypt.compare(req.body.password, user.password);
-
     if(!validPassword) return res.status(400).send('Invalid email or password.');
 
-    res.send(true);
+    const token = user.generateAuthToken();
+    res.send(token);
 });
 
 const validate = user =>{
