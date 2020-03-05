@@ -29,7 +29,13 @@ process.exit(1);
 
 app.listen(3000, () => console.log('The server is running at 3000...'));
 
-mongoose.connect('mongodb://localhost/vidly', { useNewUrlParser: true,useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/vidly', 
+{ 
+    useNewUrlParser: true,
+    useUnifiedTopology: true, 
+    useCreateIndex: true, 
+    useFindAndModify: true
+})
     .then((res) => console.log('Connected to MongoDB...'))
     .catch((err) => console.error('Could not connect to MongoDB...', err))
 
