@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+    // return console.log('rerere', req.body)
     let error = validate(req.body)
     if(error) return res.status(404).send(error.details[0].message)
     let customer = new Customer({ 

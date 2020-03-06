@@ -1,4 +1,5 @@
-const {Genre} = require('../models/genre');
+const auth = require("../middlewares/auth");
+const {Genre, validate} = require('../models/genre');
 const express = require('express');
 const Joi = require('@hapi/joi');
 const router = express.Router();
@@ -8,8 +9,8 @@ router.get('/', async (req, res) => {
     res.send(geners)
 });
 
-router.post('/', async (req, res) => {
-    let {error, value} = Joi.string().min(3).validate(req.body.name)
+router.post('/', auth,async (req, res) => {
+    let error = validate(req.body)
     if(error) return res.status(404).send(error.details[0].message)
 
     let genere = new Genre({ name:req.body.name });
